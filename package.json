@@ -4,5 +4,8 @@
   "main": "index.js",
   "repository": "git@github.com:eduardokhattab/hackernews-node.git",
   "author": "Eduardo Khattab <eduardo.khattab@gympass.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "graphql-yoga": "^1.18.3"
+  }
 }
