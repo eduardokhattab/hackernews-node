@@ -1,2 +1,2 @@
-## Hackernews write in node :clap:
+## Hackernews write in JS with node and GraphQL :clap:
 
