@@ -1,68 +1,28 @@
 const { GraphQLServer } = require('graphql-yoga');
-
-let links = [{
-  id: 'link-0',
-  url: 'www.howtographql.com',
-  description: 'Fullstack tutorial for GraphQL'
-}]
-
-let idCount = links.length
+const { prisma } = require('./generated/prisma-client')
+const Query = require('./resolvers/Query')
+const Mutation = require('./resolvers/Mutation')
+const User = require('./resolvers/User')
+const Link = require('./resolvers/Link')
+const Subscription = require('./resolvers/Subscription')
 
 const resolvers = {
-  Query: {
-    info: () => 'This is the API of Hackernews',
-    feed: () => links,
-  },
-
-  Mutation: {
-    post: (parent, args) => {
-      const link = {
-        id: `link-${idCount++}`,
-        description: args.description,
-        url: args.url,
-      }
-
-      links.push(link)
-      return link
-    },
-
-    updateLink: (_, args) => {
-      element = links.find(l => l.id == args.id)
-
-      if (element !== undefined) {
-        elementIndex = links.indexOf(element)
-
-        links[elementIndex].description = args.description
-        links[elementIndex].url = args.url
-
-        return links[elementIndex]
-      }
-      else {
-        throw new UserInputError('Form Arguments invalid', {
-          invalidArgs: Object.keys(args),
-        });
-      }
-    },
-
-    deleteLink: (_, args) => {
-      element = links.find(l => l.id == args.id)
-
-      if (element !== undefined) {
-        links.splice(links.indexOf(element), 1)
-        return element
-      }
-      else {
-        throw new UserInputError('Form Arguments invalid', {
-          invalidArgs: Object.keys(args),
-        });
-      }
-    },
-  },
+  Query,
+  Mutation,
+  Subscription,
+  User,
+  Link
 }
 
 const server = new GraphQLServer({
   typeDefs: './src/schema.graphql',
   resolvers,
+  context: request => {
+    return {
+      ...request,
+      prisma
+    }
+  },
 })
 
 server.start(() => console.log(`Server is running on localhost:4000`))
